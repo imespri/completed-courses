@@ -20,7 +20,8 @@ function App() {
     setTasks([...tasks, { ...task, completed: false, id: Date.now() }]);
   }
 
-  console.log(tasks);
+  const activeTasks = tasks.filter((task) => !task.completed);
+  const completedTasks = tasks.filter((task) => task.completed);
 
   return (
     <div className="app">
@@ -47,7 +48,7 @@ function App() {
           <button className="sort-button">By Date</button>
           <button className="sort-button">By Priority</button>
         </div>
-        {openSection.tasks && <TaskList />}
+        {openSection.tasks && <TaskList activeTasks={activeTasks} />}
       </div>
 
       <div className="completed-task-container">
@@ -58,7 +59,9 @@ function App() {
         >
           +
         </button>
-        {openSection.completed && <CompletedTaskList />}
+        {openSection.completed && (
+          <CompletedTaskList completedTasks={completedTasks} />
+        )}
       </div>
       <Footer />
     </div>
@@ -105,30 +108,26 @@ function TaskForm({ addTask }) {
   );
 }
 
-function TaskList() {
-  return (
-    <ul className="task-list">
-      <TaskItem />
-    </ul>
-  );
+function TaskList({ activeTasks }) {
+  const tasks = activeTasks.map((task) => (
+    <TaskItem task={task} key={task.id} />
+  ));
+
+  return <ul className="task-list">{tasks}</ul>;
 }
 
 function CompletedTaskList() {
-  return (
-    <ul className="completed-task-list">
-      <TaskItem />
-    </ul>
-  );
+  return <ul className="completed-task-list">{/* <TaskItem /> */}</ul>;
 }
 
-function TaskItem() {
+function TaskItem({ task }) {
   return (
-    <li className="task-item">
+    <li className={`task-item ${task.priority.toLowerCase()}`}>
       <div className="task-info">
         <div>
-          Title <strong>Medium</strong>
+          {task.title} <strong>{task.priority}</strong>
         </div>
-        <div className="task-deadline">Due: {new Date().toLocaleString()}</div>
+        <div className="task-deadline">Due: {task.deadline}</div>
       </div>
       <div className="task-buttons">
         <button className="complete-button">Complete</button>
