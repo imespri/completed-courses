@@ -1,4 +1,8 @@
 import { useState } from "react";
+import TaskForm from "./components/TaskForm";
+import TaskList from "./components/TaskList";
+import CompletedTaskList from "./components/ComplitedTaskList";
+import Footer from "./components/Footer";
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -126,107 +130,6 @@ function App() {
       </div>
       <Footer />
     </div>
-  );
-}
-
-function TaskForm({ addTask }) {
-  const [title, setTitle] = useState("");
-  const [priority, setPriority] = useState("Low");
-  const [deadline, setDeadline] = useState("");
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (title.trim() && deadline) {
-      addTask({ title, priority, deadline });
-      setTitle("");
-      setPriority("Low");
-      setDeadline("");
-    }
-  }
-
-  return (
-    <form action="" className="task-form" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={title}
-        placeholder="task title"
-        required
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <select value={priority} onChange={(e) => setPriority(e.target.value)}>
-        <option value="High">High</option>
-        <option value="Medium">Medium</option>
-        <option value="Low">Low</option>
-      </select>
-      <input
-        type="datetime-local"
-        onChange={(e) => setDeadline(e.target.value)}
-        required
-        value={deadline}
-      />
-      <button type="submit">Add task</button>
-    </form>
-  );
-}
-
-function TaskList({ activeTasks, deleteTask, completeTask }) {
-  const tasks = activeTasks.map((task) => (
-    <TaskItem
-      task={task}
-      key={task.id}
-      deleteTask={deleteTask}
-      completeTask={completeTask}
-    />
-  ));
-
-  return <ul className="task-list">{tasks}</ul>;
-}
-
-function CompletedTaskList({ completedTasks, deleteTask }) {
-  return (
-    <ul className="completed-task-list">
-      {completedTasks.map((item) => (
-        <TaskItem key={item.id} task={item} deleteTask={deleteTask} />
-      ))}
-    </ul>
-  );
-}
-
-function TaskItem({ task, deleteTask, completeTask }) {
-  return (
-    <li className={`task-item ${task.priority.toLowerCase()}`}>
-      <div className="task-info">
-        <div>
-          {task.title} <strong>{task.priority}</strong>
-        </div>
-        <div className="task-deadline">Due: {task.deadline}</div>
-      </div>
-      <div className="task-buttons">
-        {!task.completed && (
-          <button
-            className="complete-button"
-            onClick={() => completeTask(task.id)}
-          >
-            Complete
-          </button>
-        )}
-        <button className="delete-button" onClick={() => deleteTask(task.id)}>
-          Delete
-        </button>
-      </div>
-    </li>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="footer">
-      <p>
-        Technologies and React concepts used: React, JSX, props, useState,
-        component composition, conditional rendering, array methods, (map,
-        filter), event handling.
-      </p>
-    </footer>
   );
 }
 
